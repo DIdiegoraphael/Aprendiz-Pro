@@ -3,50 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aprendiz Pro - Camp SBC</title>
+    <title>Plataforma Aprendiz Pro</title>
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .tech-gradient { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+    </style>
 </head>
-<body>
+<body class="bg-[#F8FAFC] text-slate-900">
     <div id="root"></div>
 
     <script type="text/babel">
-        // O código React que conversamos entra aqui
         const { useState } = React;
 
         function App() {
             const [user, setUser] = useState(null);
-            const [tab, setTab] = useState('lms');
+            const [activeTab, setActiveTab] = useState('LMS');
+            const [subTab, setSubTab] = useState('Desenvolvimento');
+
+            const handleLogin = (e) => {
+                e.preventDefault();
+                const email = e.target.email.value.toLowerCase();
+                const pass = e.target.password.value;
+
+                // 1. ADMIN - Acesso Total
+                if (email === 'admin@campsbc.org.br') {
+                    setUser({ role: 'ADMIN', name: 'Administrador', email });
+                } 
+                // 2. INSTRUTOR - Padrão diego.raphael@...
+                else if (email.includes('.') && email.endsWith('@campsbc.org.br') && pass === 'campsbc') {
+                    setUser({ role: 'INSTRUTOR', name: email.split('@')[0].replace('.', ' '), email });
+                }
+                // 3. JOVEM - Padrão nomedojovemaprendiz@... (Sem ponto no nome conforme solicitado)
+                else if (!email.includes('.') && email.endsWith('@campsbc.org.br') && pass.startsWith('camp@')) {
+                    setUser({ role: 'JOVEM', name: email.split('@')[0], email });
+                }
+                // 4. INSTITUIÇÃO PARCEIRA
+                else if (email.includes('parceiro')) {
+                    setUser({ role: 'INSTITUICAO', name: 'Instituição Parceira', email });
+                } else {
+                    alert("Credenciais incorretas ou formato de e-mail inválido.");
+                }
+            };
 
             if (!user) {
                 return (
-                    <div className="min-h-screen flex items-center justify-center bg-slate-50">
-                        <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border border-slate-100 text-center">
-                            <h1 className="text-3xl font-bold text-blue-900 mb-6">Aprendiz <span className="text-blue-500">Pro</span></h1>
-                            <input className="w-full mb-4 p-3 border rounded-xl bg-slate-50" placeholder="usuario@campsbc.org.br" />
-                            <input className="w-full mb-6 p-3 border rounded-xl bg-slate-50" type="password" placeholder="Senha" />
-                            <button onClick={() => setUser({role: 'instrutor'})} className="w-full bg-blue-600 text-white p-3 rounded-xl font-semibold">Entrar</button>
+                    <div className="min-h-screen flex items-center justify-center tech-gradient p-4">
+                        <div className="bg-white p-10 rounded-[2.5rem] shadow-2xl w-full max-w-md border border-slate-700/50">
+                            <div className="text-center mb-10">
+                                <h1 className="text-4xl font-[900] text-slate-900 tracking-tighter italic">APRENDIZ <span className="text-blue-600">PRO</span></h1>
+                                <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mt-2">Camp SBC • Intelligence Learning</p>
+                            </div>
+                            <form onSubmit={handleLogin} className="space-y-4">
+                                <div>
+                                    <label className="text-[10px] font-black text-slate-400 uppercase ml-2">E-mail Institucional</label>
+                                    <input name="email" type="email" placeholder="exemplo@campsbc.org.br" className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition font-medium" required />
+                                </div>
+                                <div>
+                                    <label className="text-[10px] font-black text-slate-400 uppercase ml-2">Senha de Acesso</label>
+                                    <input name="password" type="password" placeholder="••••••••" className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition" required />
+                                </div>
+                                <button type="submit" className="w-full py-4 bg-blue-600 text-white rounded-2xl font-black shadow-xl shadow-blue-200 hover:bg-blue-700 transition-all transform hover:scale-[1.02]">ACESSAR PORTAL</button>
+                            </form>
                         </div>
                     </div>
                 );
             }
 
             return (
-                <div className="min-h-screen bg-slate-50">
-                    <header className="bg-white border-b px-8 py-4 flex justify-between items-center shadow-sm">
-                        <h1 className="text-xl font-extrabold text-blue-900">Aprendiz <span className="text-blue-500">Pro</span></h1>
-                        <nav className="flex gap-4">
-                            <button onClick={() => setTab('lms')} className={`px-3 py-2 ${tab === 'lms' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-400'}`}>LMS</button>
-                            <button onClick={() => setTab('parceiros')} className={`px-3 py-2 ${tab === 'parceiros' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-400'}`}>PARCEIROS</button>
-                            <button onClick={() => setTab('conectividade')} className={`px-3 py-2 ${tab === 'conectividade' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-400'}`}>CONECTIVIDADE</button>
-                        </nav>
-                        <button onClick={() => setUser(null)} className="text-red-500 text-sm">Sair</button>
+                <div className="min-h-screen flex flex-col">
+                    {/* Header Estilo IPÊ Moderno */}
+                    <header className="bg-white/80 backdrop-blur-md border-b border-slate-200 px-10 py-5 flex justify-between items-center sticky top-0 z-50">
+                        <div className="flex items-center gap-10">
+                            <h1 className="text-2xl font-[900] text-slate-900 tracking-tighter italic">APRENDIZ <span className="text-blue-600">PRO</span></h1>
+                            <nav className="hidden lg:flex gap-1 bg-slate-100 p-1 rounded-2xl">
+                                {(user.role === 'ADMIN' || user.role === 'JOVEM' || user.role === 'INSTRUTOR') && 
+                                    <button onClick={() => {setActiveTab('LMS'); setSubTab('Desenvolvimento');}} className={`px-6 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${activeTab === 'LMS' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}>LMS</button>
+                                }
+                                {(user.role === 'ADMIN' || user.role === 'INSTRUTOR') && 
+                                    <button onClick={() => setActiveTab('INTERACAO')} className={`px-6 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${activeTab === 'INTERACAO' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}>Interação Empresa</button>
+                                }
+                                {(user.role === 'ADMIN' || user.role === 'INSTITUICAO') && 
+                                    <button onClick={() => setActiveTab('METODOLOGIA')} className={`px-6 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${activeTab === 'METODOLOGIA' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}>Metodologia</button>
+                                }
+                            </nav>
+                        </div>
+                        <div className="flex items-center gap-6">
+                            <div className="text-right hidden sm:block">
+                                <p className="text-xs font-black text-slate-900 uppercase leading-none">{user.name}</p>
+                                <p className="text-[10px] text-blue-500 font-bold uppercase tracking-widest mt-1">{user.role}</p>
+                            </div>
+                            <button onClick={() => setUser(null)} className="w-10 h-10 flex items-center justify-center bg-red-50 text-red-500 rounded-full hover:bg-red-500 hover:text-white transition-all">
+                                ✕
+                            </button>
+                        </div>
                     </header>
-                    <main className="p-8 max-w-6xl mx-auto">
-                        <h2 className="text-2xl font-bold text-slate-800 uppercase tracking-tight">Bem-vindo à área de {tab}</h2>
-                        <p className="mt-4 text-slate-600 italic">Interface em desenvolvimento conforme metodologia Camp SBC.</p>
+
+                    <main className="flex-grow p-8 max-w-7xl mx-auto w-full">
+                        {activeTab === 'LMS' && (
+                            <div className="animate-fadeIn">
+                                <div className="flex flex-wrap gap-4 mb-8">
+                                    {['Desenvolvimento', 'Calendario', 'Programa'].map(t => (
+                                        <button key={t} onClick={() => setSubTab(t)} className={`px-4 py-2 text-sm font-bold rounded-full transition-all ${subTab === t ? 'bg-blue-600 text-white' : 'bg-white text-slate-400 border border-slate-200'}`}>
+                                            {t.toUpperCase()}
+                                        </button>
+                                    ))}
+                                    {user.role === 'INSTRUTOR' && (
+                                        <button onClick={() => setSubTab('Chamada')} className={`px-4 py-2 text-sm font-bold rounded-full transition-all ${subTab === 'Chamada' ? 'bg-green-600 text-white' : 'bg-white text-slate-400 border border-slate-200'}`}>
+                                            ✓ CHAMADA DA TURMA
+                                        </button>
+                                    )}
+                                </div>
+                                
+                                <div className="bg-white p-10 rounded-[2.5rem] border border-slate-200 shadow-sm min-h-[450px]">
+                                    <h3 className="text-3xl font-black text-slate-900 mb-2">{subTab}</h3>
+                                    <p className="text-slate-400 font-medium mb-8">Portal do {user.role === 'JOVEM' ? 'Aprendiz' : 'Mentor'} • Camp SBC</p>
+                                    
+                                    {/* Visão do Jovem - Trilha de Vídeos */}
+                                    {user.role === 'JOVEM' && subTab === 'Desenvolvimento' && (
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                            <div className="aspect-video bg-slate-100 rounded-[2rem] overflow-hidden border-4 border-white shadow-lg flex items-center justify-center text-slate-400">
+                                                [Player de Vídeo YouTube/Playlist]
+                                            </div>
+                                            <div className="flex flex-col justify-center">
+                                                <h4 className="text-xl font-bold">LAB 01: Introdução ao Varejo</h4>
+                                                <p className="text-slate-500 mt-2 text-sm">Assista ao vídeo completo para habilitar sua presença.</p>
+                                                <button className="mt-6 py-4 bg-blue-50 text-blue-600 rounded-2xl font-black hover:bg-blue-600 hover:text-white transition-all">CONFIRMAR MINHA PRESENÇA</button>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Visão do Instrutor - Painel de Controle */}
+                                    {user.role === 'INSTRUTOR' && subTab === 'Desenvolvimento' && (
+                                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                            <div className="p-6 bg-slate-50 rounded-3xl border border-slate-200">
+                                                <h5 className="font-black text-xs text-blue-500 uppercase tracking-widest mb-2">Turma Ativa</h5>
+                                                <p className="text-lg font-bold">LOG-2026-01</p>
+                                                <div className="mt-4 flex items-center gap-2">
+                                                    <span className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
+                                                    <span className="text-xs font-bold text-slate-500 uppercase tracking-tighter">Aula em Tempo Real</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
+                        {activeTab === 'INTERACAO' && (
+                            <div className="bg-white p-10 rounded-[2.5rem] border border-slate-200 shadow-sm">
+                                <h2 className="text-3xl font-black text-slate-900 mb-6 tracking-tight">Conectividade Corporativa</h2>
+                                <div className="grid grid-cols-1 gap-4">
+                                    <div className="p-8 bg-slate-50 rounded-[2rem] border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
+                                        <div>
+                                            <h4 className="text-xl font-bold text-slate-800 italic">Dossiê do Aprendiz</h4>
+                                            <p className="text-sm text-slate-500">Histórico de ocorrências e avaliação de desempenho.</p>
+                                        </div>
+                                        <button className="bg-white px-8 py-3 rounded-full text-xs font-black shadow-sm border border-slate-200 hover:bg-slate-900 hover:text-white transition-all">ACESSAR HISTÓRICO</button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {activeTab === 'METODOLOGIA' && (
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                                <div className="lg:col-span-2 bg-white p-10 rounded-[2.5rem] border border-slate-200">
+                                    <h2 className="text-3xl font-black text-slate-900 mb-8 italic uppercase tracking-tighter">Acervo Aprendiz Pro</h2>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        {['Matriz de Logística', 'Ementas Adm', 'Planos de Aula Varejo', 'Guias Pedagógicos'].map(item => (
+                                            <div key={item} className="group p-6 bg-slate-50 rounded-3xl border border-transparent hover:border-blue-200 hover:bg-blue-50 transition-all cursor-pointer">
+                                                <h4 className="font-bold text-slate-700 group-hover:text-blue-600">{item}</h4>
+                                                <p className="text-[10px] text-slate-400 font-black mt-2 uppercase tracking-widest">Acessar PDF / Docx</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="bg-blue-600 p-10 rounded-[2.5rem] text-white flex flex-col justify-between shadow-2xl shadow-blue-200 overflow-hidden relative">
+                                    <div className="relative z-10">
+                                        <h3 className="text-2xl font-black mb-4 uppercase tracking-tighter">Upgrade Institucional</h3>
+                                        <p className="text-blue-100 text-sm font-medium leading-relaxed">Leve a metodologia Aprendiz Pro para sua organização e certifique novos mentores.</p>
+                                    </div>
+                                    <a href="https://campsbc.org.br" className="relative z-10 w-full py-4 bg-white text-blue-600 rounded-2xl font-black mt-10 text-center shadow-lg hover:bg-blue-50 transition-all">CONSULTAR AQUISIÇÃO</a>
+                                    <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-blue-500 rounded-full opacity-50"></div>
+                                </div>
+                            </div>
+                        )}
                     </main>
                 </div>
             );
