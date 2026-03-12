@@ -4,43 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aprendiz Pro | Camp SBC</title>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0f172a; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-        .login-card { background: white; padding: 40px; border-radius: 30px; width: 100%; max-width: 380px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); text-align: center; }
-        h1 { font-style: italic; font-weight: 900; color: #0f172a; margin: 0; font-size: 28px; }
-        .blue { color: #2563eb; }
-        .input-box { text-align: left; margin-top: 25px; }
-        label { font-size: 10px; font-weight: 900; color: #94a3b8; text-transform: uppercase; margin-left: 5px; }
-        input { width: 100%; padding: 15px; margin-top: 5px; margin-bottom: 15px; border: 1px solid #e2e8f0; border-radius: 12px; box-sizing: border-box; outline: none; font-size: 14px; }
-        button { width: 100%; padding: 18px; background-color: #2563eb; color: white; border: none; border-radius: 15px; font-weight: 900; text-transform: uppercase; font-style: italic; cursor: pointer; margin-top: 10px; }
-        .hidden { display: none !important; }
-        
-        /* Dashboard */
-        #dashboard { background: #f8fafc; width: 95%; max-width: 1100px; border-radius: 40px; min-height: 600px; display: none; flex-direction: column; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.4); }
-        .top-bar { background: white; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; }
-        .nav-bar { background: white; padding: 0 40px; display: flex; gap: 30px; border-bottom: 1px solid #e2e8f0; }
-        .nav-item { background: none; border: none; padding: 20px 0; font-weight: 900; font-size: 11px; color: #94a3b8; cursor: pointer; border-bottom: 3px solid transparent; text-transform: uppercase; }
-        .nav-item.active { color: #2563eb; border-bottom-color: #2563eb; }
-        .main-content { padding: 40px; flex-grow: 1; }
-    </style>
 </head>
-<body>
+<body style="margin:0; background-color:#0f172a; font-family: sans-serif; display:flex; align-items:center; justify-content:center; min-height:100vh; padding:20px;">
 
-    <div id="view-login" class="login-card">
-        <h1>APRENDIZ <span class="blue">PRO</span></h1>
-        <p style="font-size: 10px; font-weight: 900; color: #94a3b8; letter-spacing: 2px; margin-top: 5px;">CAMP SBC • 2026</p>
+    <div id="wrapper" style="background:white; padding:40px; border-radius:40px; width:100%; max-width:400px; text-align:center; box-shadow:0 30px 60px rgba(0,0,0,0.5);">
         
-        <div class="input-box">
-            <label>E-mail Institucional</label>
-            <input type="text" id="email_field" placeholder="exemplo@campsbc.org.br">
+        <div id="login_screen">
+            <h1 style="font-weight:900; font-style:italic; font-size:32px; margin:0; letter-spacing:-2px;">APRENDIZ <span style="color:#2563eb;">PRO</span></h1>
+            <p style="font-size:10px; font-weight:bold; color:#94a3b8; text-transform:uppercase; letter-spacing:2px; margin-bottom:30px;">CAMP SBC • 2026</p>
             
-            <label>Senha de Acesso</label>
-            <input type="password" id="pass_field" placeholder="••••••••">
-            
-            <button id="btn_login">Entrar no Portal</button>
+            <div style="text-align:left;">
+                <label style="font-size:10px; font-weight:bold; color:#64748b; text-transform:uppercase; margin-left:5px;">E-mail Institucional</label>
+                <input id="e" type="text" placeholder="exemplo@campsbc.org.br" style="width:100%; padding:15px; margin-top:5px; margin-bottom:15px; border:1px solid #e2e8f0; border-radius:15px; box-sizing:border-box; outline:none;">
+                
+                <label style="font-size:10px; font-weight:bold; color:#64748b; text-transform:uppercase; margin-left:5px;">Senha</label>
+                <input id="p" type="password" placeholder="••••••••" style="width:100%; padding:15px; margin-top:5px; margin-bottom:25px; border:1px solid #e2e8f0; border-radius:15px; box-sizing:border-box; outline:none;">
+                
+                <button onclick="
+                    var email = document.getElementById('e').value.trim().toLowerCase();
+                    var pass = document.getElementById('p').value.trim();
+                    var ano = new Date().getFullYear();
+                    var ok = false;
+                    var perfil = '';
+
+                    if (email === 'admin@campsbc.org.br' && pass === 'campsbcadm@' + ano) { ok = true; perfil = 'ADMIN'; }
+                    else if (email.indexOf('aprendiz@campsbc.org.br') !== -1 && pass.indexOf('camp@') === 0) { ok = true; perfil = 'JOVEM'; }
+                    else if (email.indexOf('.') !== -1 && email.indexOf('@campsbc.org.br') !== -1 && pass === 'campsbc') { ok = true; perfil = 'INSTRUTOR'; }
+                    else if (email.indexOf('@campsbc.org.br') !== -1 && pass.indexOf('@') !== -1 && email.split('@')[0] === pass.split('@')[0]) { ok = true; perfil = 'B2B'; }
+
+                    if (ok) {
+                        document.getElementById('login_screen').style.display = 'none';
+                        document.getElementById('dash_screen').style.display = 'block';
+                        document.getElementById('wrapper').style.maxWidth = '900px';
+                        document.getElementById('perfil_tag').innerText = 'ACESSO LIBERADO: ' + perfil;
+                        document.body.style.backgroundColor = '#f1f5f9';
+                    } else {
+                        alert('ERRO: Dados inválidos para 2026.\nVerifique e-mail e senha.');
+                    }
+                " style="width:100%; padding:20px; background:#2563eb; color:white; border:none; border-radius:15px; font-weight:900; text-transform:uppercase; font-style:italic; cursor:pointer; box-shadow:0 10px 20px rgba(37,99,235,0.3);">
+                    Entrar no Portal
+                </button>
+            </div>
         </div>
+
+        <div id="dash_screen" style="display:none; animation: fadeIn 0.5s;">
+            <h2 style="font-weight:900; font-style:italic; font-size:30px; margin-bottom:10px;">Portal Ativado</h2>
+            <p id="perfil_tag" style="font-weight:bold; color:#2563eb; font-size:12px; letter-spacing:1px; margin-bottom:30px;"></p>
+            <div style="padding:60px; border:4px dashed #e2e8f0; border-radius:30px; color:#94a3b8; font-weight:bold; font-size:18px;">
+                Módulos de Aprendizagem e B2B carregados com sucesso.
+            </div>
+            <button onclick="window.location.reload()" style="margin-top:30px; background:none; border:none; color:#ef4444; font-weight:900; cursor:pointer; text-transform:uppercase; font-size:11px;">Encerrar Sessão ✕</button>
+        </div>
+
     </div>
 
-    <div id="dashboard">
-        <div class="top-bar">
-            <h1 style="font-size: 22px;">APRENDIZ <span class="blue">PRO</span></h1>
+    <style>@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }</style>
+</body>
+</html>
