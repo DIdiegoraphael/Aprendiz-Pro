@@ -5,147 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aprendiz Pro | Camp SBC</title>
     <style>
-        /* CSS INTERNO PARA EVITAR DEPENDÊNCIA DE REDE */
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0f172a; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; color: #1e293b; }
-        .card { background: white; padding: 40px; border-radius: 30px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.3); transition: 0.3s; }
-        h1 { font-style: italic; font-weight: 900; margin-bottom: 5px; font-size: 28px; letter-spacing: -1px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0f172a; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+        .login-card { background: white; padding: 40px; border-radius: 30px; width: 100%; max-width: 380px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); text-align: center; }
+        h1 { font-style: italic; font-weight: 900; color: #0f172a; margin: 0; font-size: 28px; }
         .blue { color: #2563eb; }
-        .input-group { text-align: left; margin-top: 25px; }
+        .input-box { text-align: left; margin-top: 25px; }
         label { font-size: 10px; font-weight: 900; color: #94a3b8; text-transform: uppercase; margin-left: 5px; }
         input { width: 100%; padding: 15px; margin-top: 5px; margin-bottom: 15px; border: 1px solid #e2e8f0; border-radius: 12px; box-sizing: border-box; outline: none; font-size: 14px; }
-        input:focus { border-color: #2563eb; ring: 2px #2563eb; }
         button { width: 100%; padding: 18px; background-color: #2563eb; color: white; border: none; border-radius: 15px; font-weight: 900; text-transform: uppercase; font-style: italic; cursor: pointer; margin-top: 10px; }
-        button:hover { background-color: #1d4ed8; }
         .hidden { display: none !important; }
         
-        /* DASHBOARD */
-        #dashboard { background-color: #f8fafc; width: 100%; max-width: 1000px; border-radius: 40px; overflow: hidden; display: none; flex-direction: column; min-height: 500px; box-shadow: 0 25px 50px rgba(0,0,0,0.2); }
-        .header { background: white; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; }
-        .nav { background: white; padding: 0 40px; display: flex; gap: 20px; border-bottom: 1px solid #e2e8f0; }
-        .nav-btn { background: none; color: #94a3b8; border: none; padding: 15px 0; font-size: 11px; font-weight: 900; cursor: pointer; border-bottom: 3px solid transparent; width: auto; }
-        .nav-btn.active { color: #2563eb; border-bottom-color: #2563eb; }
-        .main { padding: 40px; flex-grow: 1; }
+        /* Dashboard */
+        #dashboard { background: #f8fafc; width: 95%; max-width: 1100px; border-radius: 40px; min-height: 600px; display: none; flex-direction: column; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.4); }
+        .top-bar { background: white; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; }
+        .nav-bar { background: white; padding: 0 40px; display: flex; gap: 30px; border-bottom: 1px solid #e2e8f0; }
+        .nav-item { background: none; border: none; padding: 20px 0; font-weight: 900; font-size: 11px; color: #94a3b8; cursor: pointer; border-bottom: 3px solid transparent; text-transform: uppercase; }
+        .nav-item.active { color: #2563eb; border-bottom-color: #2563eb; }
+        .main-content { padding: 40px; flex-grow: 1; }
     </style>
 </head>
 <body>
 
-    <div id="login-view" class="card">
+    <div id="view-login" class="login-card">
         <h1>APRENDIZ <span class="blue">PRO</span></h1>
-        <p style="font-size: 10px; font-weight: 900; color: #94a3b8; letter-spacing: 2px;">CAMP SBC • 2026</p>
+        <p style="font-size: 10px; font-weight: 900; color: #94a3b8; letter-spacing: 2px; margin-top: 5px;">CAMP SBC • 2026</p>
         
-        <div class="input-group">
+        <div class="input-box">
             <label>E-mail Institucional</label>
-            <input type="text" id="email" placeholder="usuario@campsbc.org.br">
+            <input type="text" id="email_field" placeholder="exemplo@campsbc.org.br">
             
             <label>Senha de Acesso</label>
-            <input type="password" id="pass" placeholder="••••••••">
+            <input type="password" id="pass_field" placeholder="••••••••">
             
-            <button onclick="tentarLogar()">Entrar no Portal</button>
+            <button id="btn_login">Entrar no Portal</button>
         </div>
     </div>
 
     <div id="dashboard">
-        <div class="header">
-            <h1 style="font-size: 20px;">APRENDIZ <span class="blue">PRO</span></h1>
-            <div style="text-align: right;">
-                <p id="u-name" style="margin: 0; font-weight: 900; font-size: 12px; text-transform: uppercase;"></p>
-                <p id="u-role" style="margin: 0; font-weight: 900; font-size: 9px; color: #2563eb; letter-spacing: 1px;"></p>
-            </div>
-            <button onclick="location.reload()" style="width: 35px; height: 35px; padding: 0; border-radius: 50%; background: #fee2e2; color: #ef4444; margin: 0; font-size: 14px;">✕</button>
-        </div>
-        <div class="nav" id="nav-area"></div>
-        <div class="main" id="main-area">
-            <h2 id="page-title" style="font-style: italic; font-weight: 900; text-transform: uppercase;">Bem-vindo</h2>
-            <div id="page-content" style="padding: 50px; border: 3px dashed #e2e8f0; border-radius: 30px; text-align: center; color: #94a3b8; font-weight: bold;">
-                Selecione uma aba para carregar as informações.
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function tentarLogar() {
-            const e = document.getElementById('email').value.trim().toLowerCase();
-            const p = document.getElementById('pass').value.trim();
-            const ano = new Date().getFullYear(); // 2026
-
-            let user = null;
-
-            // 1. ADMIN
-            if (e === 'admin@campsbc.org.br' && p === 'campsbcadm@' + ano) {
-                user = { n: 'GESTOR MASTER', r: 'ADMIN', tabs: ['LMS', 'INTERAÇÃO', 'B2B'] };
-            }
-            // 2. JOVEM
-            else if (e.indexOf('aprendiz@campsbc.org.br') !== -1 && p.indexOf('camp@') === 0) {
-                user = { n: e.split('aprendiz')[0].toUpperCase(), r: 'JOVEM', tabs: ['LMS'] };
-            }
-            // 3. INSTRUTOR
-            else if (e.includes('.') && e.endsWith('@campsbc.org.br') && p === 'campsbc') {
-                user = { n: e.split('@')[0].replace('.',' ').toUpperCase(), r: 'INSTRUTOR', tabs: ['LMS', 'INTERAÇÃO'] };
-            }
-            // 4. B2B
-            else if (e.endsWith('@campsbc.org.br') && p.includes('@') && e.split('@')[0] === p.split('@')[0]) {
-                user = { n: e.split('@')[0].toUpperCase(), r: 'B2B', tabs: ['B2B'] };
-            }
-
-            if (user) {
-                document.getElementById('login-view').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'flex';
-                document.body.style.backgroundColor = '#f1f5f9';
-                document.body.style.alignItems = 'flex-start';
-                document.body.style.paddingTop = '50px';
-
-                document.getElementById('u-name').innerText = user.n;
-                document.getElementById('u-role').innerText = user.r;
-
-                const nav = document.getElementById('nav-area');
-                nav.innerHTML = user.tabs.map(t => `<button class="nav-btn" onclick="abrirAba('${t}', '${user.r}')">${t}</button>`).join('');
-                abrirAba(user.tabs[0], user.r);
-            } else {
-                alert("ACESSO NEGADO!\n\nVerifique:\n1. Se o e-mail termina com @campsbc.org.br\n2. Se a senha de 2026 está correta.");
-            }
-        }
-
-        function abrirAba(t, r) {
-            document.getElementById('page-title').innerText = t;
-            const content = document.getElementById('page-content');
-            
-            // Estilo dos botões da nav
-            const btns = document.querySelectorAll('.nav-btn');
-            btns.forEach(b => {
-                b.classList.remove('active');
-                if(b.innerText === t) b.classList.add('active');
-            });
-
-            if (t === 'LMS') {
-                content.innerHTML = `<div style="text-align:left; color:#1e293b">
-                    <div style="background:#0f172a; height:200px; border-radius:20px; display:flex; align-items:center; justify-content:center; color:white; font-style:italic; font-weight:900; margin-bottom:20px">PLAYER DE VÍDEO LABS</div>
-                    <h3>Ciclo de Desenvolvimento</h3>
-                    <p style="font-size:14px; color:#64748b">Assista aos encontros gravados e laboratórios de informática aqui.</p>
-                    <button style="width:auto; padding: 15px 30px">Confirmar Minha Presença</button>
-                    ${(r === 'ADMIN' || r === 'INSTRUTOR') ? '<button style="width:auto; background:#10b981; margin-left:10px">Fazer Chamada</button>' : ''}
-                </div>`;
-            } else if (t === 'INTERAÇÃO') {
-                content.innerHTML = `<div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; color:#1e293b">
-                    <div style="padding:20px; border:1px solid #e2e8f0; border-radius:20px; text-align:left">
-                        <span style="font-size:10px; font-weight:900; color:#2563eb">DOSSIÊ</span>
-                        <p style="font-weight:900; text-transform:uppercase; margin-top:5px">Ocorrências</p>
-                    </div>
-                    <div style="padding:20px; border:1px solid #e2e8f0; border-radius:20px; text-align:left">
-                        <span style="font-size:10px; font-weight:900; color:#2563eb">AVALIAÇÃO</span>
-                        <p style="font-weight:900; text-transform:uppercase; margin-top:5px">Desempenho Empresa</p>
-                    </div>
-                </div>`;
-            } else if (t === 'B2B') {
-                content.innerHTML = `<div style="background:#2563eb; padding:40px; border-radius:30px; color:white; text-align:left">
-                    <h3 style="font-weight:900; font-style:italic; text-transform:uppercase; margin:0">Metodologia Aprendiz Pro</h3>
-                    <p style="font-size:14px; opacity:0.8; margin-bottom:30px">Repositório exclusivo para instituições parceiras.</p>
-                    <div style="display:flex; gap:10px">
-                        <div style="background:rgba(255,255,255,0.1); padding:15px; border-radius:12px; font-weight:bold; flex:1; text-align:center; border:1px solid rgba(255,255,255,0.2)">Matriz Curricular</div>
-                        <div style="background:rgba(255,255,255,0.1); padding:15px; border-radius:12px; font-weight:bold; flex:1; text-align:center; border:1px solid rgba(255,255,255,0.2)">Ementas</div>
-                    </div>
-                </div>`;
-            }
-        }
-    </script>
-</body>
-</html>
+        <div class="top-bar">
+            <h1 style="font-size: 22px;">APRENDIZ <span class="blue">PRO</span></h1>
