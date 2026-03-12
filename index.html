@@ -106,3 +106,18 @@
                         <div className="bg-white p-10 rounded-[3rem] border border-slate-200 shadow-sm">
                             <h2 className="text-4xl font-[900] text-slate-900 mb-4 italic uppercase tracking-tighter">{activeTab}</h2>
                             <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px] mb-8">Olá, {user.name} • Perfil: {user.role}</p>
+                            
+                            {activeTab === 'LMS' && <div className="p-12 text-center text-slate-400 border-4 border-dashed rounded-[2rem]">Área de Desenvolvimento e LABS ativada.</div>}
+                            {activeTab === 'INTERACAO' && <div className="p-12 text-center text-slate-400 border-4 border-dashed rounded-[2rem]">Portal de Conectividade RH & Mentor.</div>}
+                            {activeTab === 'B2B' && <div className="p-12 text-center text-slate-400 border-4 border-dashed rounded-[2rem]">Repositório de Metodologia Aprendiz Pro.</div>}
+                        </div>
+                    </main>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
