@@ -3,59 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aprendiz Pro | Camp SBC</title>
+    <title>Plataforma Aprendiz Pro | Camp SBC</title>
     <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body style="background-color: #0f172a; font-family: sans-serif; display: flex; align-items: center; justify-center: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box;">
-
-    <div id="container" style="background: white; border-radius: 40px; padding: 40px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
-        
-        <div id="login-view">
-            <h1 style="font-weight: 900; font-style: italic; font-size: 30px; margin-bottom: 5px;">APRENDIZ <span style="color: #2563eb;">PRO</span></h1>
-            <p style="font-size: 10px; font-weight: bold; color: #94a3b8; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 30px;">CAMP SBC • 2026</p>
-            
-            <div style="text-align: left;">
-                <input id="email" type="text" placeholder="E-mail Institucional" style="width: 100%; padding: 15px; margin-bottom: 15px; border: 1px solid #e2e8f0; border-radius: 15px; outline: none; box-sizing: border-box;">
-                <input id="pass" type="password" placeholder="Senha" style="width: 100%; padding: 15px; margin-bottom: 25px; border: 1px solid #e2e8f0; border-radius: 15px; outline: none; box-sizing: border-box;">
-                
-                <button onclick="
-                    var e = document.getElementById('email').value.trim().toLowerCase();
-                    var p = document.getElementById('pass').value.trim();
-                    var ano = new Date().getFullYear();
-                    var user = '';
-
-                    if (e === 'admin@campsbc.org.br' && p === 'campsbcadm@' + ano) { user = 'ADMIN'; }
-                    else if (e.indexOf('aprendiz@campsbc.org.br') !== -1 && p.indexOf('camp@') === 0) { user = 'JOVEM'; }
-                    else if (e.indexOf('.') !== -1 && e.indexOf('@campsbc.org.br') !== -1 && p === 'campsbc') { user = 'INSTRUTOR'; }
-                    else if (e.indexOf('@campsbc.org.br') !== -1 && p.indexOf('@') !== -1 && e.split('@')[0] === p.split('@')[0]) { user = 'B2B'; }
-
-                    if (user !== '') {
-                        document.getElementById('login-view').style.display = 'none';
-                        document.getElementById('dash-view').style.display = 'block';
-                        document.getElementById('container').style.maxWidth = '800px';
-                        document.getElementById('role-tag').innerText = 'PERFIL: ' + user;
-                    } else {
-                        alert('ERRO DE ACESSO!\nE-mail ou Senha incorretos para o padrão de 2026.');
-                    }
-                " style="width: 100%; padding: 18px; background: #2563eb; color: white; border: none; border-radius: 15px; font-weight: 900; text-transform: uppercase; font-style: italic; cursor: pointer;">
-                    Entrar no Portal
-                </button>
-            </div>
-        </div>
-
-        <div id="dash-view" style="display: none; animation: fadeIn 0.5s;">
-            <h2 style="font-weight: 900; font-style: italic; font-size: 28px; margin-bottom: 10px;">Portal Ativado</h2>
-            <p id="role-tag" style="font-weight: bold; color: #2563eb; font-size: 12px; margin-bottom: 30px;"></p>
-            <div style="padding: 40px; border: 3px dashed #f1f5f9; border-radius: 30px; color: #94a3b8; font-weight: bold;">
-                Módulos de Aprendizagem e Gestão carregados com sucesso.
-            </div>
-            <button onclick="window.location.reload()" style="margin-top: 30px; background: none; border: none; color: #ef4444; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 10px;">Encerrar Sessão</button>
-        </div>
-
-    </div>
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
+        body { font-family: 'Inter', sans-serif; margin: 0; background-color: #0f172a; }
+        .hidden { display: none !important; }
+        .fade-in { animation: fadeIn 0.5s ease-out; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
-</body>
-</html>
+</head>
+<body>
+
+    <div id="app-container" class="min-h-screen flex items-center justify-center p-4">
+        
+        <div id="view-login" class="bg-white p-10 rounded-[2.5rem] shadow-2xl w-full max-w-md text-center fade-in">
+            <h1 class="text-3xl font-[900] text-slate-900 tracking-tighter italic mb-1 uppercase">APRENDIZ <span class="text-blue-600">PRO</span></h1>
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-8">Camp SBC • 2026</p>
+            
+            <div class="space-y-4 text-left">
+                <input id="email" type="text" placeholder="E-mail Institucional" class="w-full p-4 bg-slate-50 border rounded-2xl outline-none focus:ring-2 focus:ring-blue-600 font-medium">
+                <input id="pass" type="password" placeholder="Senha" class="w-full p-4 bg-slate-50 border rounded-2xl outline-none focus:ring-2 focus:ring-blue-600 font-medium">
+                <button onclick="autenticar()" class="w-full py-4 bg-blue-600 text-white rounded-2xl font-[900] uppercase italic tracking-tighter shadow-xl hover:bg-blue-700 transition">Entrar no Portal</button>
+            </div>
+        </div>
+
+        <div id="view-dash" class="hidden w-full max-w-6xl bg-[#F8FAFC] rounded-[3rem] shadow-2xl overflow-hidden flex flex-col min-h-[600px] fade-in">
+            
+            <header class="bg-white border-b px-10 py-6 flex justify-between items-center">
+                <h1 class="text-2xl font-[900] italic tracking-tighter text-slate-900">APRENDIZ <span class="text-blue-600">PRO</span></h1>
+                <div class="flex items-center gap-6">
+                    <div class="text-right">
+                        <p id="out-name" class="text-xs font-black uppercase text-slate-900 leading-none"></p>
+                        <p id="out-role" class="text-[9px] text-blue-500 font-bold uppercase tracking-widest mt-1"></p>
+                    </div>
+                    <button onclick="window.location.reload()" class="w-10 h-10 flex items-center justify-center bg-red-50 text-red-500 rounded-full font-bold hover:bg-red-500 hover:text-white transition">✕</button>
+                </div>
+            </header>
+
+            <nav id="nav-tabs" class="bg-white border-b px-10 flex gap-8"></nav>
+
+            <main class="p-10 flex-grow" id="content-main"></main>
+
+        </div>
+    </div>
+
+    <script>
+        function autenticar() {
+            const e = document.getElementById('email').value.trim().toLowerCase();
+            const p = document.getElementById('pass').value.trim();
+            const ano = new Date().getFullYear(); // 2026
+            let user = null;
+
+            // Lógica de Perfis
+            if (e === 'admin@campsbc.org.br' && p === 'campsbcadm@' + ano) {
+                user = { role: 'ADMIN', name: 'GESTOR MASTER', tabs: ['LMS', 'INTERAÇÃO', 'B2B'] };
+            } else if (e.includes('aprendiz@campsbc.org.br') && p.startsWith('camp@')) {
+                user = { role: 'JOVEM', name: e.split('aprendiz')[0].toUpperCase(), tabs: ['LMS'] };
+            } else if (e.includes('.') && e.endsWith('@campsbc.org.br') && p === 'campsbc') {
+                user = { role: 'INSTRUTOR', name: e.split('@')[0].replace('.',' ').toUpperCase(), tabs: ['LMS', 'INTERAÇÃO'] };
+            } else if (e.endsWith('@campsbc.org.br') && p.includes('@') && e.split('@')[0] === p.split('@')[0]) {
+                user = { role: 'B2B', name: e.split('@')[0].toUpperCase(), tabs: ['B2B'] };
+            }
+
+            if (user) {
+                abrirPainel(user);
+            } else {
