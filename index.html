@@ -7,100 +7,43 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; transition: all 0.3s ease; }
+        body { font-family: 'Inter', sans-serif; }
         .tech-gradient { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
-        .hidden { display: none; }
     </style>
 </head>
 <body class="bg-[#F8FAFC]">
-
-    <div id="login-screen" class="min-h-screen flex items-center justify-center tech-gradient p-4">
-        <div class="bg-white p-10 rounded-[2.5rem] shadow-2xl w-full max-w-md border border-slate-700/50 text-center">
-            <h1 class="text-4xl font-[900] text-slate-900 tracking-tighter italic mb-2">APRENDIZ <span class="text-blue-600">PRO</span></h1>
-            <p class="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em] mb-10 text-center">Login do Sistema</p>
-            
-            <form id="login-form" class="space-y-4 text-left">
-                <input id="email" type="email" placeholder="E-mail Institucional" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition font-medium" required>
-                <input id="password" type="password" placeholder="Senha de Acesso" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition font-medium" required>
-                <button type="submit" class="w-full py-4 bg-blue-600 text-white rounded-2xl font-[900] shadow-xl hover:bg-blue-700 transition uppercase italic tracking-tighter">Entrar na Plataforma</button>
-            </form>
+    <div id="app">
+        <div class="min-h-screen flex items-center justify-center tech-gradient p-4">
+            <div class="bg-white p-10 rounded-[2.5rem] shadow-2xl w-full max-w-md text-center">
+                <h1 class="text-4xl font-[900] text-slate-900 tracking-tighter italic mb-8">APRENDIZ <span class="text-blue-600">PRO</span></h1>
+                <form id="loginForm" class="space-y-4 text-left">
+                    <input id="email" type="email" placeholder="E-mail (@campsbc.org.br)" class="w-full p-4 bg-slate-50 border rounded-2xl outline-none" required>
+                    <input id="pass" type="password" placeholder="Senha" class="w-full p-4 bg-slate-50 border rounded-2xl outline-none" required>
+                    <button type="submit" class="w-full py-4 bg-blue-600 text-white rounded-2xl font-[900] uppercase italic tracking-tighter shadow-xl">Entrar</button>
+                </form>
+            </div>
         </div>
     </div>
-
-    <div id="dashboard" class="hidden min-h-screen flex flex-col">
-        <header class="bg-white border-b border-slate-200 px-8 py-5 flex justify-between items-center sticky top-0 z-50">
-            <h1 class="text-2xl font-[900] text-slate-900 tracking-tighter italic">APRENDIZ <span class="text-blue-600">PRO</span></h1>
-            <div class="flex items-center gap-6">
-                <div class="text-right hidden sm:block">
-                    <p id="display-name" class="text-[10px] font-black text-slate-900 uppercase leading-none"></p>
-                    <p id="display-role" class="text-[8px] text-blue-500 font-black uppercase mt-1 tracking-widest leading-none"></p>
-                </div>
-                <button onclick="logout()" class="w-10 h-10 flex items-center justify-center bg-red-50 text-red-500 rounded-full font-bold hover:bg-red-500 hover:text-white transition-all">✕</button>
-            </div>
-        </header>
-
-        <main class="flex-grow p-8 max-w-7xl mx-auto w-full">
-            <div class="bg-white p-10 rounded-[3rem] border border-slate-200 shadow-sm min-h-[500px]">
-                <h2 id="tab-title" class="text-4xl font-[900] text-slate-900 mb-8 italic tracking-tighter uppercase leading-none">Bem-vindo</h2>
-                <div id="content-area" class="p-12 text-center text-slate-400 border-4 border-dashed rounded-[2rem] font-bold">
-                    Carregando módulos da plataforma...
-                </div>
-            </div>
-        </main>
-    </div>
-
     <script>
-        const loginForm = document.getElementById('login-form');
-        const loginScreen = document.getElementById('login-screen');
-        const dashboard = document.getElementById('dashboard');
-
-        loginForm.addEventListener('submit', function(e) {
+        document.getElementById('loginForm').onsubmit = function(e) {
             e.preventDefault();
             const email = document.getElementById('email').value.trim().toLowerCase();
-            const pass = document.getElementById('password').value.trim();
-            const anoAtual = new Date().getFullYear();
+            const pass = document.getElementById('pass').value.trim();
+            const ano = new Date().getFullYear();
 
-            let user = null;
-
-            // 1. ADMIN (campsbcadm@2026)
-            if (email === 'admin@campsbc.org.br' && pass === `campsbcadm@${anoAtual}`) {
-                user = { role: 'ADMIN', name: 'GESTOR MASTER' };
-            } 
-            // 2. JOVEM (diegosilvaaprendiz@... | camp@2026)
-            else if (email.includes('aprendiz@campsbc.org.br') && pass.startsWith('camp@')) {
-                user = { role: 'JOVEM', name: email.split('aprendiz@')[0].toUpperCase() };
-            }
-            // 3. INSTRUTOR (diego.raphael@... | campsbc)
-            else if (email.includes('.') && email.endsWith('@campsbc.org.br') && pass === 'campsbc') {
-                user = { role: 'INSTRUTOR', name: email.split('@')[0].replace('.', ' ').toUpperCase() };
-            }
-            // 4. B2B (campsantoandre@... | campsantoandre@2026)
-            else if (email.endsWith('@campsbc.org.br') && pass.includes('@')) {
-                const unidade = email.split('@')[0];
-                if (pass === `${unidade}@${pass.split('@')[1]}`) {
-                    user = { role: 'INSTITUICAO', name: unidade.toUpperCase() };
-                }
-            }
-
-            if (user) {
-                showDashboard(user);
+            // Lógica de 2026
+            if (email === 'admin@campsbc.org.br' && pass === `campsbcadm@${ano}`) {
+                alert("Logado como ADMIN");
+            } else if (email.includes('aprendiz@campsbc.org.br') && pass.startsWith('camp@')) {
+                alert("Logado como JOVEM");
+            } else if (email.includes('.') && email.endsWith('@campsbc.org.br') && pass === 'campsbc') {
+                alert("Logado como INSTRUTOR");
+            } else if (email.endsWith('@campsbc.org.br') && pass.includes('@')) {
+                alert("Logado como B2B");
             } else {
-                alert("Acesso Negado! Verifique as regras de e-mail e senha para 2026.");
+                alert("Credenciais Inválidas para 2026!");
             }
-        });
-
-        function showDashboard(user) {
-            loginScreen.classList.add('hidden');
-            dashboard.classList.remove('hidden');
-            document.getElementById('display-name').innerText = user.name;
-            document.getElementById('display-role').innerText = user.role;
-            document.getElementById('tab-title').innerText = "Portal " + user.role;
-            document.getElementById('content-area').innerText = "Conteúdo ativado para " + user.name + ". As abas de LMS e B2B Aprendizagem estão prontas para visualização.";
-        }
-
-        function logout() {
-            window.location.reload();
-        }
+        };
     </script>
 </body>
 </html>
