@@ -5,69 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aprendiz Pro | Camp SBC</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #1e293b; }
-        .login-box { background: white; border-radius: 2rem; padding: 2.5rem; width: 100%; max-width: 400px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); }
-        .hidden { display: none !important; }
-    </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
+<body style="background-color: #0f172a; font-family: sans-serif; display: flex; align-items: center; justify-center: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box;">
 
-    <div id="login-area" class="login-box">
-        <h1 class="text-3xl font-black italic text-center mb-1">APRENDIZ <span class="text-blue-600">PRO</span></h1>
-        <p class="text-[10px] font-bold text-slate-400 text-center uppercase tracking-widest mb-8">Camp SBC • 2026</p>
+    <div id="container" style="background: white; border-radius: 40px; padding: 40px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
         
-        <div class="space-y-4">
-            <input id="f_email" type="text" placeholder="E-mail Institucional" class="w-full p-4 bg-slate-50 border rounded-2xl outline-none focus:ring-2 focus:ring-blue-600">
-            <input id="f_pass" type="password" placeholder="Senha" class="w-full p-4 bg-slate-50 border rounded-2xl outline-none focus:ring-2 focus:ring-blue-600">
-            <button onclick="tentarAcesso()" class="w-full py-4 bg-blue-600 text-white rounded-2xl font-black uppercase italic tracking-tighter shadow-lg hover:bg-blue-700 transition">Entrar</button>
+        <div id="login-view">
+            <h1 style="font-weight: 900; font-style: italic; font-size: 30px; margin-bottom: 5px;">APRENDIZ <span style="color: #2563eb;">PRO</span></h1>
+            <p style="font-size: 10px; font-weight: bold; color: #94a3b8; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 30px;">CAMP SBC • 2026</p>
+            
+            <div style="text-align: left;">
+                <input id="email" type="text" placeholder="E-mail Institucional" style="width: 100%; padding: 15px; margin-bottom: 15px; border: 1px solid #e2e8f0; border-radius: 15px; outline: none; box-sizing: border-box;">
+                <input id="pass" type="password" placeholder="Senha" style="width: 100%; padding: 15px; margin-bottom: 25px; border: 1px solid #e2e8f0; border-radius: 15px; outline: none; box-sizing: border-box;">
+                
+                <button onclick="
+                    var e = document.getElementById('email').value.trim().toLowerCase();
+                    var p = document.getElementById('pass').value.trim();
+                    var ano = new Date().getFullYear();
+                    var user = '';
+
+                    if (e === 'admin@campsbc.org.br' && p === 'campsbcadm@' + ano) { user = 'ADMIN'; }
+                    else if (e.indexOf('aprendiz@campsbc.org.br') !== -1 && p.indexOf('camp@') === 0) { user = 'JOVEM'; }
+                    else if (e.indexOf('.') !== -1 && e.indexOf('@campsbc.org.br') !== -1 && p === 'campsbc') { user = 'INSTRUTOR'; }
+                    else if (e.indexOf('@campsbc.org.br') !== -1 && p.indexOf('@') !== -1 && e.split('@')[0] === p.split('@')[0]) { user = 'B2B'; }
+
+                    if (user !== '') {
+                        document.getElementById('login-view').style.display = 'none';
+                        document.getElementById('dash-view').style.display = 'block';
+                        document.getElementById('container').style.maxWidth = '800px';
+                        document.getElementById('role-tag').innerText = 'PERFIL: ' + user;
+                    } else {
+                        alert('ERRO DE ACESSO!\nE-mail ou Senha incorretos para o padrão de 2026.');
+                    }
+                " style="width: 100%; padding: 18px; background: #2563eb; color: white; border: none; border-radius: 15px; font-weight: 900; text-transform: uppercase; font-style: italic; cursor: pointer;">
+                    Entrar no Portal
+                </button>
+            </div>
         </div>
+
+        <div id="dash-view" style="display: none; animation: fadeIn 0.5s;">
+            <h2 style="font-weight: 900; font-style: italic; font-size: 28px; margin-bottom: 10px;">Portal Ativado</h2>
+            <p id="role-tag" style="font-weight: bold; color: #2563eb; font-size: 12px; margin-bottom: 30px;"></p>
+            <div style="padding: 40px; border: 3px dashed #f1f5f9; border-radius: 30px; color: #94a3b8; font-weight: bold;">
+                Módulos de Aprendizagem e Gestão carregados com sucesso.
+            </div>
+            <button onclick="window.location.reload()" style="margin-top: 30px; background: none; border: none; color: #ef4444; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 10px;">Encerrar Sessão</button>
+        </div>
+
     </div>
 
-    <div id="dashboard-area" class="hidden w-full max-w-4xl bg-white p-10 rounded-[3rem] shadow-2xl">
-        <h2 class="text-3xl font-black italic uppercase tracking-tighter mb-4">Portal Liberado</h2>
-        <div id="msg-sucesso" class="p-10 border-4 border-dashed rounded-[2rem] text-slate-400 font-bold text-center">
-            Bem-vindo ao sistema Aprendiz Pro.
-        </div>
-        <button onclick="window.location.reload()" class="mt-6 text-red-500 font-bold text-xs uppercase">Sair</button>
-    </div>
-
-    <script>
-        function tentarAcesso() {
-            const e = document.getElementById('f_email').value.trim().toLowerCase();
-            const p = document.getElementById('f_pass').value.trim();
-            const ano = new Date().getFullYear(); // 2026
-
-            console.log("Tentativa de login:", e, p); // Ver no console do navegador (F12)
-
-            let permitido = false;
-            let info = "";
-
-            // Lógica Master 2026
-            if (e === "admin@campsbc.org.br" && p === "campsbcadm@" + ano) {
-                permitido = true; info = "ADMINISTRADOR MASTER";
-            } 
-            else if (e.indexOf("aprendiz@campsbc.org.br") !== -1 && p.startsWith("camp@")) {
-                permitido = true; info = "JOVEM APRENDIZ";
-            }
-            else if (e.indexOf(".") !== -1 && e.indexOf("@campsbc.org.br") !== -1 && p === "campsbc") {
-                permitido = true; info = "INSTRUTOR MENTOR";
-            }
-            else if (e.indexOf("@campsbc.org.br") !== -1 && p.indexOf("@") !== -1) {
-                const uE = e.split("@")[0];
-                const uP = p.split("@")[0];
-                if (uE === uP) { permitido = true; info = "B2B APRENDIZAGEM (" + uE.toUpperCase() + ")"; }
-            }
-
-            if (permitido) {
-                document.getElementById('login-area').classList.add('hidden');
-                document.getElementById('dashboard-area').classList.remove('hidden');
-                document.getElementById('msg-sucesso').innerText = "Perfil identificado: " + info + "\nAcesso concedido com sucesso.";
-                document.body.style.backgroundColor = "#F8FAFC";
-            } else {
-                alert("ACESSO NEGADO!\n\nDados digitados:\nE-mail: " + e + "\nSenha: " + p + "\n\nAs regras de 2026 exigem o padrão correto.");
-            }
-        }
-    </script>
+    <style>
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
 </body>
 </html>
