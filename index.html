@@ -16,14 +16,14 @@
         <div class="min-h-screen flex items-center justify-center tech-gradient p-4">
             <div class="bg-white p-10 rounded-[2.5rem] shadow-2xl w-full max-w-md text-center">
                 <h1 class="text-4xl font-[900] text-slate-900 tracking-tighter italic mb-8">APRENDIZ <span class="text-blue-600">PRO</span></h1>
-                <form id="loginForm" class="space-y-4 text-left">
+                <form id="mainForm" class="space-y-4 text-left">
                     <div>
                         <label class="text-[10px] font-black text-slate-400 uppercase ml-2 tracking-widest">E-mail Institucional</label>
-                        <input id="email" type="text" placeholder="exemplo@campsbc.org.br" class="w-full p-4 bg-slate-50 border rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition font-medium" required>
+                        <input id="userEmail" type="text" placeholder="usuario@campsbc.org.br" class="w-full p-4 bg-slate-50 border rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition font-medium" required>
                     </div>
                     <div>
                         <label class="text-[10px] font-black text-slate-400 uppercase ml-2 tracking-widest">Senha de Acesso</label>
-                        <input id="pass" type="password" placeholder="••••••••" class="w-full p-4 bg-slate-50 border rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition font-medium" required>
+                        <input id="userPass" type="password" placeholder="••••••••" class="w-full p-4 bg-slate-50 border rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition font-medium" required>
                     </div>
                     <button type="submit" class="w-full py-4 bg-blue-600 text-white rounded-2xl font-[900] uppercase italic tracking-tighter shadow-xl hover:bg-blue-700 transition transform hover:scale-[1.02]">Entrar na Plataforma</button>
                 </form>
@@ -32,51 +32,19 @@
     </div>
 
     <script>
-        document.getElementById('loginForm').onsubmit = function(e) {
+        const form = document.getElementById('mainForm');
+        const app = document.getElementById('app');
+
+        form.onsubmit = function(e) {
             e.preventDefault();
-            // .trim() remove espaços e .toLowerCase() ignora maiúsculas no e-mail
-            const email = document.getElementById('email').value.trim().toLowerCase();
-            const pass = document.getElementById('pass').value.trim();
-            const anoAtual = new Date().getFullYear(); // 2026
+            const email = document.getElementById('userEmail').value.trim().toLowerCase();
+            const pass = document.getElementById('userPass').value.trim();
+            const ano = new Date().getFullYear(); // 2026
 
-            let perfil = "";
-            let nome = "";
+            let auth = { success: false, role: '', name: '' };
 
-            // 1. ADMIN MASTER
-            if (email === "admin@campsbc.org.br" && pass === "campsbcadm@" + anoAtual) {
-                perfil = "ADMIN";
-                nome = "GESTOR MASTER";
+            // 1. ADMIN (campsbcadm@2026)
+            if (email === "admin@campsbc.org.br" && pass === "campsbcadm@" + ano) {
+                auth = { success: true, role: "ADMIN MASTER", name: "GESTOR" };
             }
-            // 2. JOVEM APRENDIZ (Procura 'aprendiz' antes do @)
-            else if (email.includes("aprendiz@campsbc.org.br") && pass.startsWith("camp@")) {
-                perfil = "JOVEM";
-                nome = email.split("aprendiz")[0].toUpperCase();
-            }
-            // 3. INSTRUTOR (Procura o PONTO no e-mail)
-            else if (email.includes(".") && email.endsWith("@campsbc.org.br") && pass === "campsbc") {
-                perfil = "INSTRUTOR";
-                nome = email.split("@")[0].replace(".", " ").toUpperCase();
-            }
-            // 4. B2B / INSTITUIÇÃO CLIENTE (Padrão unidade@ano)
-            else if (email.endsWith("@campsbc.org.br") && pass.includes("@")) {
-                const prefixoEmail = email.split("@")[0];
-                const prefixoSenha = pass.split("@")[0];
-                if (prefixoEmail === prefixoSenha) {
-                    perfil = "B2B";
-                    nome = prefixoEmail.toUpperCase();
-                }
-            }
-
-            if (perfil !== "") {
-                document.getElementById('app').innerHTML = `
-                    <div class="min-h-screen flex flex-col bg-white">
-                        <header class="p-6 border-b flex justify-between items-center bg-slate-50">
-                            <h1 class="text-xl font-black italic">APRENDIZ <span class="text-blue-600">PRO</span></h1>
-                            <div class="text-right">
-                                <p class="text-xs font-black uppercase leading-none">${nome}</p>
-                                <p class="text-[10px] text-blue-500 font-bold uppercase tracking-widest mt-1">${perfil}</p>
-                            </div>
-                        </header>
-                        <main class="p-10 flex-grow">
-                            <h2 class="text-3xl font-black italic mb-4 uppercase tracking-tighter">Portal de Acesso Ativado</h2>
-                            <div class="p-16 border-4 border-dashed
+            // 2. JOVEM (d
