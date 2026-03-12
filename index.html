@@ -15,15 +15,15 @@
     <div id="app">
         <div class="min-h-screen flex items-center justify-center tech-gradient p-4">
             <div class="bg-white p-10 rounded-[2.5rem] shadow-2xl w-full max-w-md text-center">
-                <h1 class="text-4xl font-[900] text-slate-900 tracking-tighter italic mb-8">APRENDIZ <span class="text-blue-600">PRO</span></h1>
-                <form id="mainForm" class="space-y-4 text-left">
+                <h1 class="text-4xl font-[900] text-slate-900 tracking-tighter italic mb-8 uppercase">APRENDIZ <span class="text-blue-600">PRO</span></h1>
+                <form id="authForm" class="space-y-4 text-left">
                     <div>
-                        <label class="text-[10px] font-black text-slate-400 uppercase ml-2 tracking-widest">E-mail Institucional</label>
-                        <input id="userEmail" type="text" placeholder="usuario@campsbc.org.br" class="w-full p-4 bg-slate-50 border rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition font-medium" required>
+                        <label class="text-[10px] font-black text-slate-400 uppercase ml-2 tracking-widest">Login Institucional</label>
+                        <input id="login_email" type="text" placeholder="nome@campsbc.org.br" class="w-full p-4 bg-slate-50 border rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition font-medium" required>
                     </div>
                     <div>
                         <label class="text-[10px] font-black text-slate-400 uppercase ml-2 tracking-widest">Senha de Acesso</label>
-                        <input id="userPass" type="password" placeholder="••••••••" class="w-full p-4 bg-slate-50 border rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition font-medium" required>
+                        <input id="login_pass" type="password" placeholder="••••••••" class="w-full p-4 bg-slate-50 border rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition font-medium" required>
                     </div>
                     <button type="submit" class="w-full py-4 bg-blue-600 text-white rounded-2xl font-[900] uppercase italic tracking-tighter shadow-xl hover:bg-blue-700 transition transform hover:scale-[1.02]">Entrar na Plataforma</button>
                 </form>
@@ -32,19 +32,22 @@
     </div>
 
     <script>
-        const form = document.getElementById('mainForm');
-        const app = document.getElementById('app');
-
-        form.onsubmit = function(e) {
+        const authForm = document.getElementById('authForm');
+        
+        authForm.onsubmit = function(e) {
             e.preventDefault();
-            const email = document.getElementById('userEmail').value.trim().toLowerCase();
-            const pass = document.getElementById('userPass').value.trim();
+            const email = document.getElementById('login_email').value.trim().toLowerCase();
+            const pass = document.getElementById('login_pass').value.trim();
             const ano = new Date().getFullYear(); // 2026
 
-            let auth = { success: false, role: '', name: '' };
+            let user = null;
 
-            // 1. ADMIN (campsbcadm@2026)
-            if (email === "admin@campsbc.org.br" && pass === "campsbcadm@" + ano) {
-                auth = { success: true, role: "ADMIN MASTER", name: "GESTOR" };
-            }
-            // 2. JOVEM (d
+            // --- LÓGICA DE PERFIS REFATORADA ---
+
+            // 1. ADMIN (Prioridade máxima na verificação)
+            if (email === "admin@campsbc.org.br") {
+                if (pass === `campsbcadm@${ano}`) {
+                    user = { role: "ADMIN MASTER", name: "GESTOR CAMP", color: "blue" };
+                }
+            } 
+            // 2. JOVEM APRENDIZ (Critério: Contém '
