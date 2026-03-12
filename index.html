@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprendiz Pro - Camp SBC</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // O código React que conversamos entra aqui
+        const { useState } = React;
+
+        function App() {
+            const [user, setUser] = useState(null);
+            const [tab, setTab] = useState('lms');
+
+            if (!user) {
+                return (
+                    <div className="min-h-screen flex items-center justify-center bg-slate-50">
+                        <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border border-slate-100 text-center">
+                            <h1 className="text-3xl font-bold text-blue-900 mb-6">Aprendiz <span className="text-blue-500">Pro</span></h1>
+                            <input className="w-full mb-4 p-3 border rounded-xl bg-slate-50" placeholder="usuario@campsbc.org.br" />
+                            <input className="w-full mb-6 p-3 border rounded-xl bg-slate-50" type="password" placeholder="Senha" />
+                            <button onClick={() => setUser({role: 'instrutor'})} className="w-full bg-blue-600 text-white p-3 rounded-xl font-semibold">Entrar</button>
+                        </div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="min-h-screen bg-slate-50">
+                    <header className="bg-white border-b px-8 py-4 flex justify-between items-center shadow-sm">
+                        <h1 className="text-xl font-extrabold text-blue-900">Aprendiz <span className="text-blue-500">Pro</span></h1>
+                        <nav className="flex gap-4">
+                            <button onClick={() => setTab('lms')} className={`px-3 py-2 ${tab === 'lms' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-400'}`}>LMS</button>
+                            <button onClick={() => setTab('parceiros')} className={`px-3 py-2 ${tab === 'parceiros' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-400'}`}>PARCEIROS</button>
+                            <button onClick={() => setTab('conectividade')} className={`px-3 py-2 ${tab === 'conectividade' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-400'}`}>CONECTIVIDADE</button>
+                        </nav>
+                        <button onClick={() => setUser(null)} className="text-red-500 text-sm">Sair</button>
+                    </header>
+                    <main className="p-8 max-w-6xl mx-auto">
+                        <h2 className="text-2xl font-bold text-slate-800 uppercase tracking-tight">Bem-vindo à área de {tab}</h2>
+                        <p className="mt-4 text-slate-600 italic">Interface em desenvolvimento conforme metodologia Camp SBC.</p>
+                    </main>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
